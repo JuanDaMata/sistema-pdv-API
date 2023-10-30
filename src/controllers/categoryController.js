@@ -1,11 +1,12 @@
-const knex = require('../connections/knex');
+const listCategories = require("../database/categoryDatabase");
 
 const listAllCategorys = async (req, res) => {
     try {
-        res.status(200).json(await knex('categorias'));
+        const categories = await listCategories();
+        return res.status(200).json(categories);
     }
     catch (error) {
-        console.error(error.message);
+        return res.status(500).json({ message: error.message });
     }
 }
 
