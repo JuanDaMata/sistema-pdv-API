@@ -9,6 +9,15 @@ const findByEmail = async (email) => {
     }
 };
 
+const emailVerifyUpdate = async (email, id) => {
+    try {
+        const user = await knex("usuarios").where({ email }).andWhere("id", "!=", id).first();
+        return user;
+    } catch (error) {
+        return new Error("Erro de comunicação.");
+    }
+};
+
 const registerNewUserDatabase = async (nome, email, senha) => {
     try {
         const registeredUser = await knex("usuarios").insert({
@@ -23,7 +32,23 @@ const registerNewUserDatabase = async (nome, email, senha) => {
     }
 };
 
+const editUserProfile = async (nome, email, senha) => {
+    const loggedInUserId = req.user.id;
+
+    try {
+        const userEdited = await knex("usuarios")
+        .where('id', loggedInUserId)
+        .update({ nome, email, senha });
+
+        return userEdited;
+    } catch (error) {
+        return new Error("Erro ao atualização usuário.");
+    }
+};
+
 module.exports = {
     findByEmail,
-    registerNewUserDatabase
+    emailVerifyUpdate,
+    registerNewUserDatabase,
+    editUserProfile
 };
