@@ -54,6 +54,15 @@ const editProfile = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ message: error.mensagem });
     }
+
+    const cryptographedPassword = await bcrypt.hash(senha, 10);
+   
+    await editUserProfile(userLoged, nome, email, cryptographedPassword);
+   
+    return res.status(201).json({ mensagem: "Usuário atualizado com sucesso." })
+  } catch (error) {
+    return res.status(500).json({ message: error.mensagem });
+  }
 };
 
 module.exports = {
