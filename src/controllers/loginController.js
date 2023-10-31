@@ -2,24 +2,20 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { findByEmail } = require("../database/userDatabase");
 
-const login = async (req, res, next) => {
+const login = async (req, res) => {
   try {
     const { email, senha } = req.body;
-
-    if (!email || !senha) {
-      return res.status(404).json("Todos os campos são obrigatórios");
-    }
 
     const userFound = await findByEmail(email);
 
     if (!userFound) {
-      return res.status(404).json("Usuário ou senha inválido");
+      return res.status(401).json("Usuário ou senha inválido");
     }
 
     const correctPassword = await bcrypt.compare(senha, userFound.senha);
 
     if (!correctPassword) {
-      return res.status(400).json("Email e senha não confere");
+      return res.status(401).json("Usuário ou senha inválido");
     }
 
     const userTokenData = {
