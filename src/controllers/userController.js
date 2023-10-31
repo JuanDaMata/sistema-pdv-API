@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
-const { findByEmail, registerNewUserDatabase, editUserProfile, emailVerifyUpdate } = require('../database/userDatabase');
+const { findByEmail, findById, registerNewUserDatabase, editUserProfile, emailVerifyUpdate } = require('../database/userDatabase');
+const { id } = require('yup-locales');
 
 const userRegister = async (req, res) => {
     try {
@@ -30,10 +31,18 @@ const userRegister = async (req, res) => {
 };
 
 const detailProfile = async (req, res) => {
-    try {
-        const user = req.user;
+    const { id } = req.user;
 
-        return res.status(200).json(user);
+    try {
+        const user = await findById(id);
+        
+        const userDetail = {
+            id: user.id,
+            nome: user.nome,
+            email: user.email
+        };
+      
+        return res.status(200).json(userDetail);
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -41,10 +50,10 @@ const detailProfile = async (req, res) => {
 
 const editProfile = async (req, res) => {
     const { nome, email, senha } = req.body;
-    const { id } = req.user;
+    const userLoged = req.user.id;
 
     try {
-        const userEmail = await emailVerifyUpdate(email, id);
+        const userEmail = await emailVerifyUpdate(email, userLoged);
 
         if (userEmail) {
             return res.status(400).json({ mensagem: "O e-mail informado já existe." });

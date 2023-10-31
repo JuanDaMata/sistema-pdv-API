@@ -11,10 +11,7 @@ userRouter.post('/usuario',
     userRegister
 );
 
-userRouter.get('/usuario',
-    verifyLoggedUser,
-    detailProfile
-);
+userRouter.get('/usuario', verifyLoggedUser, detailProfile);
 
 userRouter.put('/usuario',
     validationBodyMiddleware(userUpdateSchema),
