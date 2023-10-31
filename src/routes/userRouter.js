@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const validationBodyMiddleware = require('../middlewares/validation');
 const { userRegisterSchema, userUpdateSchema } = require('../validations/userSchema');
-const { userRegister } = require('../controllers/userController');
+const { userRegister, detailProfile, editProfile } = require('../controllers/userController');
 
 const userRouter = Router();
 
@@ -10,10 +10,11 @@ userRouter.post('/usuario',
     userRegister
 );
 
-userRouter.get('/usuario');
+userRouter.get('/usuario', detailProfile);
 
 userRouter.put('/usuario',
-    validationBodyMiddleware(userUpdateSchema)
+    validationBodyMiddleware(userUpdateSchema),
+    editProfile
 );
 
 module.exports = userRouter;
