@@ -1,9 +1,10 @@
 const bcrypt = require('bcrypt');
-const { findByEmail, registerNewUserDatabase, editUserProfile, emailVerifyUpdate } = require('../database/userDatabase');
+const { findByEmail, findById, registerNewUserDatabase, editUserProfile, emailVerifyUpdate } = require('../database/userDatabase');
+const { id } = require('yup-locales');
 
-const userRegister = async (req, res) => {    
+const userRegister = async (req, res) => {
     try {
-        const {nome, email, senha} = req.body;
+        const { nome, email, senha } = req.body;
 
         const user = await findByEmail(email);
 
@@ -26,10 +27,18 @@ const userRegister = async (req, res) => {
 }
 
 const detailProfile = async (req, res) => {
+    const { id } = req.user;
+
     try {
-        const user = req.user;
+        const user = await findById(id);
         
-        return res.status(200).json(user);
+        const userDetail = {
+            id: user.id,
+            nome: user.nome,
+            email: user.email
+        };
+      
+        return res.status(200).json(userDetail);
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -37,32 +46,23 @@ const detailProfile = async (req, res) => {
 
 const editProfile = async (req, res) => {
     const { nome, email, senha } = req.body;
-    const { id } = req.user;
-   
-    try {
-        const userEmail = await emailVerifyUpdate(email, id);
+    const userLoged = req.user.id;
 
-        if(userEmail) {
+    try {
+        const userEmail = await emailVerifyUpdate(email, userLoged);
+
+        if (userEmail) {
             return res.status(400).json({ mensagem: "O e-mail informado já existe." });
-        } 
+        }
 
         const cryptographedPassword = await bcrypt.hash(senha, 10);
 
-        await editUserProfile(nome, email, cryptographedPassword);
+        await editUserProfile(userLoged, nome, email, cryptographedPassword);
 
-        return res.status(201).json({ mensagem: "Usuário atualizado com sucesso."})
+        return res.status(201).json({ mensagem: "Usuário atualizado com sucesso." })
     } catch (error) {
         return res.status(500).json({ message: error.mensagem });
     }
-
-    const cryptographedPassword = await bcrypt.hash(senha, 10);
-   
-    await editUserProfile(userLoged, nome, email, cryptographedPassword);
-   
-    return res.status(201).json({ mensagem: "Usuário atualizado com sucesso." })
-  } catch (error) {
-    return res.status(500).json({ message: error.mensagem });
-  }
 };
 
 module.exports = {
