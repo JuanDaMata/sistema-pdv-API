@@ -32,12 +32,12 @@ const registerNewUserDatabase = async (nome, email, senha) => {
     }
 };
 
-const editUserProfile = async (nome, email, senha) => {
-    const loggedInUserId = req.user.id;
-
+const editUserProfile = async (req, nome, email, senha) => {
+    const userLoged = req;
+   
     try {
         const userEdited = await knex("usuarios")
-        .where('id', loggedInUserId)
+        .where('id', userLoged)
         .update({ nome, email, senha });
 
         return userEdited;
