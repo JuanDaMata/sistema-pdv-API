@@ -12,7 +12,6 @@ const findByEmail = async (email) => {
 const findById = async (id) => {
     try {
         const user = await knex("usuarios").where({ id }).first();
-        
         return user;
     } catch (error) {
         return new Error("Erro de comunicação.");
@@ -44,11 +43,11 @@ const registerNewUserDatabase = async (nome, email, senha) => {
 
 const editUserProfile = async (req, nome, email, senha) => {
     const userLoged = req;
-   
+
     try {
         const userEdited = await knex("usuarios")
-        .where('id', userLoged)
-        .update({ nome, email, senha });
+            .where('id', userLoged)
+            .update({ nome, email, senha });
 
         return userEdited;
     } catch (error) {
@@ -62,5 +61,4 @@ module.exports = {
     emailVerifyUpdate,
     registerNewUserDatabase,
     editUserProfile
-    
 };

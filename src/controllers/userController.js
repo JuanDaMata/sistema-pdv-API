@@ -1,6 +1,11 @@
 const bcrypt = require('bcrypt');
-const { findByEmail, findById, registerNewUserDatabase, editUserProfile, emailVerifyUpdate } = require('../database/userDatabase');
-const { id } = require('yup-locales');
+const {
+    findByEmail,
+    findById,
+    registerNewUserDatabase,
+    editUserProfile,
+    emailVerifyUpdate
+} = require('../database/userDatabase');
 
 const userRegister = async (req, res) => {
     try {
@@ -35,13 +40,13 @@ const detailProfile = async (req, res) => {
 
     try {
         const user = await findById(id);
-        
+
         const userDetail = {
             id: user.id,
             nome: user.nome,
             email: user.email
         };
-      
+
         return res.status(200).json(userDetail);
     } catch (error) {
         return res.status(500).json({ message: error.message });
