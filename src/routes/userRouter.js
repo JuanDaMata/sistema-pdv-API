@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const validationBodyMiddleware = require('../middlewares/validation');
+const { validationBodyMiddleware } = require('../middlewares/validation');
 const { userRegisterSchema, userUpdateSchema } = require('../validations/userSchema');
 const { userRegister, detailProfile, editProfile } = require('../controllers/userController');
 const verifyLoggedUser = require('../middlewares/loginMiddleware');
@@ -17,8 +17,8 @@ userRouter.get('/usuario',
 );
 
 userRouter.put('/usuario',
-    validationBodyMiddleware(userUpdateSchema),
     verifyLoggedUser,
+    validationBodyMiddleware(userUpdateSchema),
     editProfile
 );
 

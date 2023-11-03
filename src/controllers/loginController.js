@@ -1,12 +1,12 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { findByEmail } = require("../database/userDatabase");
+const { findByEmailWithContext } = require("../database/generic");
 
 const login = async (req, res) => {
   try {
     const { email, senha } = req.body;
 
-    const userFound = await findByEmail(email);
+    const userFound = await findByEmailWithContext('usuarios', email);
 
     if (!userFound) {
       return res.status(401).json("Usuário ou senha inválido");

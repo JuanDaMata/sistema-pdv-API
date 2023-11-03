@@ -1,17 +1,16 @@
 const bcrypt = require('bcrypt');
 const {
-    findByEmail,
     registerNewUserDatabase,
     editUserProfile,
     emailVerifyUpdate
 } = require('../database/userDatabase');
-const { findByIdWithContext } = require('../database/generic');
+const { findByIdWithContext, findByEmailWithContext } = require('../database/generic');
 
 const userRegister = async (req, res) => {
     try {
         const { nome, email, senha } = req.body;
 
-        const user = await findByEmail(email);
+        const user = await findByEmailWithContext('usuarios', email);
 
         if (user) {
             return res.status(400).json({
