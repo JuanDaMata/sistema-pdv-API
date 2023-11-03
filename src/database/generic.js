@@ -18,7 +18,17 @@ const findByIdWithContext = async (context, id) => {
     }
 };
 
+const findByEmailWithContext = async (context, email) => {
+    try {
+        const user = await knex(context).where({ email }).first();
+        return user;
+    } catch (error) {
+        return new Error("Erro de comunicação.");
+    }
+};
+
 module.exports = {
+    listAll,
     findByIdWithContext,
-    listAll
+    findByEmailWithContext
 }
