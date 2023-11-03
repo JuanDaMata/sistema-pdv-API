@@ -12,6 +12,4 @@ app.use(loginRouter);
 app.use(categoryRouter);
 app.use(userRouter);
 
-app.listen(process.env.PORT, () => {
-    console.log(`Servidor rodando na porta ${process.env.PORT}`);
-});
+app.listen(process.env.PORT, () => console.log(`Servidor rodando na porta ${process.env.PORT}`));
