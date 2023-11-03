@@ -1,0 +1,3 @@
+const knex = require('../connections/knex');
+
+//implementar deletar, atualizar...

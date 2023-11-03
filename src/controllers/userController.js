@@ -1,11 +1,11 @@
 const bcrypt = require('bcrypt');
 const {
     findByEmail,
-    findById,
     registerNewUserDatabase,
     editUserProfile,
     emailVerifyUpdate
 } = require('../database/userDatabase');
+const { findByIdWithContext } = require('../database/generic');
 
 const userRegister = async (req, res) => {
     try {
@@ -39,7 +39,7 @@ const detailProfile = async (req, res) => {
     const { id } = req.user;
 
     try {
-        const user = await findById(id);
+        const user = await findByIdWithContext("usuarios", id);
 
         const userDetail = {
             id: user.id,
