@@ -8,14 +8,15 @@ const {
   productSchema,
   productParamsIdSchema,
 } = require("../validations/productSchema");
+const { registerProduct } = require("../controllers/productController");
 
 const productRouter = Router();
 
 productRouter.post(
   "/produto",
   verifyLoggedUser,
-  validationBodyMiddleware(productSchema)
-  //controller
+  validationBodyMiddleware(productSchema),
+  registerProduct
 );
 
 productRouter.get(
