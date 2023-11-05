@@ -14,7 +14,7 @@ const registerNewClientDatabase = async (client) => {
         const registeredClient = await knex("clientes").insert(client).returning("*");
         return registeredClient[0];
     } catch (error) {
-        return new Error("Erro no cadastro do usuário.");
+        return new Error("Erro no cadastro do cliente.");
     }
 };
 
