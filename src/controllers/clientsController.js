@@ -1,4 +1,46 @@
-const { findByIdWithContext, listAll } = require("../database/generic");
+const { findClientByCpf, registerNewClientDatabase } = require("../database/clientDatabase");
+const { findByIdWithContext, listAll, findByEmailWithContext } = require("../database/generic");
+
+const clientRegister = async (req, res) => {
+    const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
+
+    try {
+        const clientEmailAlreadyExists = await findByEmailWithContext('clientes', email);
+        // const emailAlreadyExists = await findByEmailWithContext('usuarios', email);
+        if (clientEmailAlreadyExists
+            // || emailAlreadyExists
+        ) {
+            return res.status(400).json({
+                mensagem: "O e-mail informado já está cadastrado."
+            });
+        }
+
+        const cpfAlreadyExists = await findClientByCpf(cpf);
+
+        if (cpfAlreadyExists) {
+            return res.status(400).json({
+                mensagem: "O CPF informado já está cadastrado."
+            });
+        }
+
+        const client = {
+            nome,
+            email,
+            cpf,
+            cep,
+            rua,
+            numero,
+            bairro,
+            cidade,
+            estado
+        };
+
+        const newClient = await registerNewClientDatabase(client);
+        return res.status(200).json(newClient);
+    } catch (error) {
+        return res.status(500).json({ mensagem: error.message });
+    }
+};
 
 const detailClient = async (req, res) => {
     const clientId = req.params.id;
@@ -26,6 +68,7 @@ const listAllClients = async (req, res) => {
 }
 
 module.exports = {
+    clientRegister,
     detailClient,
     listAllClients
 }
