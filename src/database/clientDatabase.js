@@ -22,12 +22,13 @@ const registerNewClientDatabase = async (client) => {
 
 const editClientWithContext = async (id, client) => {
   try {
-    const user = await knex("clientes").where({ id }).update(client);
-
-    console.log("Resultado da atualização:", user);
+    const user = await knex("clientes")
+      .where({ id })
+      .update(client)
+      .returning("*");
+    console.log("Usuario atualizado database: ", user);
     return user;
   } catch (error) {
-    console.error("Erro durante a atualização:", error);
     return new Error("Erro de comunicação.");
   }
 };

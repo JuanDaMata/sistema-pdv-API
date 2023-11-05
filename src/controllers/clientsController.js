@@ -1,3 +1,4 @@
+const { id } = require("yup-locales");
 const {
   findClientByCpf,
   registerNewClientDatabase,
@@ -84,15 +85,12 @@ const listAllClients = async (req, res) => {
 };
 
 const editClient = async (req, res) => {
-  const clientId = req.params.id;
+  const { id } = req.params;
   const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } =
     req.body;
 
-  if (!clientId)
-    return res.status(400).json({ msg: "O campo id é obrigatório" });
-
   try {
-    const clientExist = await findByIdWithContext("clientes", clientId);
+    const clientExist = await findByIdWithContext("clientes", id);
 
     if (!clientExist)
       return res.status(400).json({ mensagem: "Cliente não encontrado" });
@@ -109,9 +107,16 @@ const editClient = async (req, res) => {
       estado,
     };
 
-    const updatedClient = await editClientWithContext(clientId, client);
-    return res.status(200).json(updatedClient);
+    const updatedClient = await editClientWithContext(id, client);
+    console.log("Cliente atualizado: ", updatedClient);
+
+    if (updatedClient > 0) {
+      return res.status(400).json({ mensagem: "Erro ao atualizar o cliente" });
+    }
+
+    return res.status(200).json("Cliente atualizado com sucesso");
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ mensagem: error.message });
   }
 };
