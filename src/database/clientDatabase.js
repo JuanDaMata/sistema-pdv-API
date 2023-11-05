@@ -20,15 +20,14 @@ const registerNewClientDatabase = async (client) => {
   }
 };
 
-const editClientWithContext = async (context, id) => {
+const editClientWithContext = async (id, client) => {
   try {
-    const user = await knex(context).where({ id }).update({
-      nome,
-      email,
-      cpf,
-    });
+    const user = await knex("clientes").where({ id }).update(client);
+
+    console.log("Resultado da atualização:", user);
     return user;
   } catch (error) {
+    console.error("Erro durante a atualização:", error);
     return new Error("Erro de comunicação.");
   }
 };

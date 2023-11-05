@@ -85,18 +85,32 @@ const listAllClients = async (req, res) => {
 
 const editClient = async (req, res) => {
   const clientId = req.params.id;
+  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } =
+    req.body;
 
   if (!clientId)
     return res.status(400).json({ msg: "O campo id é obrigatório" });
-  if (isNaN(clientId))
-    return res
-      .status(400)
-      .json({ msg: "O campo id deve ser um número válido" });
 
   try {
-    const client = await findByEmailWithContext("clientes", clientId);
-    if (!client)
+    const clientExist = await findByIdWithContext("clientes", clientId);
+
+    if (!clientExist)
       return res.status(400).json({ mensagem: "Cliente não encontrado" });
+
+    const client = {
+      nome,
+      email,
+      cpf,
+      cep,
+      rua,
+      numero,
+      bairro,
+      cidade,
+      estado,
+    };
+
+    const updatedClient = await editClientWithContext(clientId, client);
+    return res.status(200).json(updatedClient);
   } catch (error) {
     return res.status(500).json({ mensagem: error.message });
   }
