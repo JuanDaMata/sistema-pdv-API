@@ -35,7 +35,7 @@ const editProduct = async (req, res) => {
 
     if (quantidade_estoque < 0) {
         return res.status(400).json({ mensagem: "Quantidade de estoque inválida" });
-    };
+    }
 
     try {
         const productCategoryExist = await findCategoriaById(categoria_id);

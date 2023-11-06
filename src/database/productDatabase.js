@@ -23,7 +23,7 @@ const findProductById = async (id) => {
         const productExist = await knex('produtos').where('id', id).first();
         return productExist;
     } catch (error) {
-        return new Error("Erro de comunicação.");
+        return new Error("Erro de comunicação.")
     }
 };
 
