@@ -11,6 +11,7 @@ const {
 const {
   registerProduct,
   editProduct,
+  deleteProduct,
 } = require("../controllers/productController");
 
 const productRouter = Router();
@@ -46,8 +47,8 @@ productRouter.put(
 productRouter.delete(
   "/produto/:id",
   verifyLoggedUser,
-  validationParamsMiddleware(productParamsIdSchema)
-  //controller
+  validationParamsMiddleware(productParamsIdSchema),
+  deleteProduct
 );
 
 module.exports = productRouter;
