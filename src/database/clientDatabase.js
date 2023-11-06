@@ -26,7 +26,6 @@ const editClientWithContext = async (id, client) => {
       .where({ id })
       .update(client)
       .returning("*");
-    console.log("Usuario atualizado database: ", user);
     return user;
   } catch (error) {
     return new Error("Erro de comunicação.");

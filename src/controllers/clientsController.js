@@ -108,7 +108,6 @@ const editClient = async (req, res) => {
     };
 
     const updatedClient = await editClientWithContext(id, client);
-    console.log("Cliente atualizado: ", updatedClient);
 
     if (updatedClient > 0) {
       return res.status(400).json({ mensagem: "Erro ao atualizar o cliente" });
@@ -116,7 +115,6 @@ const editClient = async (req, res) => {
 
     return res.status(200).json("Cliente atualizado com sucesso");
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ mensagem: error.message });
   }
 };
