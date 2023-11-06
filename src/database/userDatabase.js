@@ -33,7 +33,7 @@ const editUserProfile = async (req, nome, email, senha) => {
 
         return userEdited;
     } catch (error) {
-        return new Error("Erro ao atualização usuário.");
+        return new Error("Erro ao atualizar usuário.");
     }
 };
 

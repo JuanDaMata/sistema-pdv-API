@@ -18,7 +18,30 @@ const registerNewProductDatabase  = async (product) => {
     }
 };
 
+const findProductById = async (id) => {
+    try {
+        const productExist = await knex('produtos').where('id', id).first();
+        return productExist;
+    } catch (error) {
+        return new Error("Erro de comunicação.");
+    }
+};
+
+const editRegisteredProduct = async (id, descricao, quantidade_estoque, valor, categoria_id) => {
+    try {
+        const editedProduct = await knex('produtos')
+        .where('id', id)
+        .update({ descricao, quantidade_estoque, valor, categoria_id });
+
+        return editedProduct;
+    } catch (error) {
+        return new Error("Erro ao atualizar produto.");
+    }
+};
+
 module.exports = {
     findCategoriaById,
-    registerNewProductDatabase
+    registerNewProductDatabase,
+    findProductById,
+    editRegisteredProduct
 }
