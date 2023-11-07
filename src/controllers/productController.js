@@ -17,9 +17,7 @@ const registerProduct = async (req, res) => {
         const productCategoryExist = await findCategoriaById(categoria_id);
 
         if (!productCategoryExist) {
-            return res
-                .status(400)
-                .json({ mensagem: "A categoria informada não existe." });
+            return res.status(400).json({ mensagem: "A categoria informada não existe." });
         }
 
         const product = {
@@ -55,9 +53,7 @@ const editProduct = async (req, res) => {
         const productExist = await findProductById(id);
 
         if (!productExist) {
-            return res
-                .status(400)
-                .json({ mensagem: "O produto informado não existe." });
+            return res.status(400).json({ mensagem: "O produto informado não existe." });
         }
 
         await editRegisteredProduct(

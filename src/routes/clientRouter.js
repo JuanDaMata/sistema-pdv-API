@@ -6,7 +6,7 @@ const {
     detailClient,
     listAllClients,
     clientRegister,
-    editClient,
+    editClient
 } = require("../controllers/clientsController");
 
 const clientRouter = Router();
