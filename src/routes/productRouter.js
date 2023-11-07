@@ -2,13 +2,14 @@ const { Router } = require('express');
 const verifyLoggedUser = require('../middlewares/loginMiddleware');
 const { validationBodyMiddleware, validationParamsMiddleware } = require('../middlewares/validation');
 const { productSchema, productParamsIdSchema } = require('../validations/productSchema');
+const { registerProduct } = require('../controllers/productController');
 
 const productRouter = Router();
 
 productRouter.post('/produto',
     verifyLoggedUser,
     validationBodyMiddleware(productSchema),
-    //controller
+    registerProduct
 );
 
 productRouter.get('/produto',
