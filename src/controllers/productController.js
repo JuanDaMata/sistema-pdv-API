@@ -1,4 +1,6 @@
-const { findCategoriaById, registerNewProductDatabase, findProductById, editRegisteredProduct } = require("../database/productDatabase");
+const { findByIdWithContext } = require("../database/generic");
+const { registerNewProductDatabase, editRegisteredProduct } = require("../database/productDatabase");
+
 
 const registerProduct = async (req, res) => {
     const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
@@ -8,11 +10,11 @@ const registerProduct = async (req, res) => {
     };
 
     try {
-        const productCategoryExist = await findCategoriaById(categoria_id);
+        const productCategoryExist = await findByIdWithContext('categorias', categoria_id);
 
         if (!productCategoryExist) {
             return res.status(400).json({ mensagem: "A categoria informada não existe." })
-        }
+        };
 
         const product = {
             descricao,
@@ -35,16 +37,16 @@ const editProduct = async (req, res) => {
 
     if (quantidade_estoque < 0) {
         return res.status(400).json({ mensagem: "Quantidade de estoque inválida" });
-    }
+    };
 
     try {
-        const productCategoryExist = await findCategoriaById(categoria_id);
+        const productCategoryExist = await findByIdWithContext('categorias', categoria_id);
 
         if (!productCategoryExist) {
             return res.status(400).json({ mensagem: "A categoria informada não existe." })
         };
 
-        const productExist = await findProductById(id);
+        const productExist = await findByIdWithContext('produtos', id);
 
         if (!productExist) {
             return res.status(400).json({ mensagem: "O produto informado não existe." })
