@@ -5,6 +5,8 @@ const { productSchema, productParamsIdSchema } = require("../validations/product
 const {
     registerProduct,
     editProduct,
+    listProducts,
+    detailProduct,
     deleteProduct
 } = require("../controllers/productController");
 
@@ -16,15 +18,15 @@ productRouter.post("/produto",
     registerProduct
 );
 
-productRouter.get("/produto",
-    verifyLoggedUser
-    //controller
+productRouter.get('/produto',
+    verifyLoggedUser,
+    listProducts
 );
 
 productRouter.get("/produto/:id",
     verifyLoggedUser,
-    validationParamsMiddleware(productParamsIdSchema)
-    //controller
+    validationParamsMiddleware(productParamsIdSchema),
+    detailProduct
 );
 
 productRouter.put("/produto/:id",

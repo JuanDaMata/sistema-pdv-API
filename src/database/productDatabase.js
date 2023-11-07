@@ -1,14 +1,5 @@
 const knex = require("../connections/knex");
 
-const findCategoriaById = async (categoria_id) => {
-    try {
-        const product = await knex("categorias").where("id", categoria_id).first();
-        return product;
-    } catch (error) {
-        return new Error("Erro de comunicação.");
-    }
-};
-
 const registerNewProductDatabase = async (product) => {
     try {
         const registeredProduct = await knex("produtos").insert(product).returning("*");
@@ -47,10 +38,32 @@ const deleteRegisterProduct = async (id) => {
     }
 };
 
+const findAllProducts = async () => {
+    try {
+
+        const products = await knex('produtos');
+
+        return products;
+    } catch (error) {
+        return new Error("Erro de comunicação.");
+    }
+};
+
+const findProductsByCategoryId = async (categoria_id) => {
+    try {
+        const products = await knex('produtos').where('categoria_id', categoria_id);
+
+        return products;
+    } catch (error) {
+        return new Error("Erro de comunicação.");
+    }
+};
+
 module.exports = {
-    findCategoriaById,
     registerNewProductDatabase,
     findProductById,
     editRegisteredProduct,
-    deleteRegisterProduct
+    deleteRegisterProduct,
+    findAllProducts,
+    findProductsByCategoryId
 };
