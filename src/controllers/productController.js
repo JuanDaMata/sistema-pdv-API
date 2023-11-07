@@ -1,7 +1,9 @@
 const { findByIdWithContext } = require("../database/generic");
 const {
     registerNewProductDatabase,
+    findProductById,
     editRegisteredProduct,
+    deleteRegisterProduct,
     findAllProducts,
     findProductsByCategoryId
 } = require("../database/productDatabase");
@@ -11,7 +13,7 @@ const registerProduct = async (req, res) => {
 
     if (quantidade_estoque < 0) {
         return res.status(400).json({ mensagem: "Quantidade de estoque inválida" });
-    };
+    }
 
     try {
         const productCategoryExist = await findByIdWithContext('categorias', categoria_id);
@@ -47,18 +49,41 @@ const editProduct = async (req, res) => {
         const productCategoryExist = await findByIdWithContext('categorias', categoria_id);
 
         if (!productCategoryExist) {
-            return res.status(400).json({ mensagem: "A categoria informada não existe." })
-        };
+            return res.status(400).json({ mensagem: "A categoria informada não existe." });
+        }
 
         const productExist = await findByIdWithContext('produtos', id);
 
         if (!productExist) {
-            return res.status(400).json({ mensagem: "O produto informado não existe." })
-        };
+            return res.status(400).json({ mensagem: "O produto informado não existe." });
+        }
 
-        await editRegisteredProduct(id, descricao, quantidade_estoque, valor, categoria_id);
+        await editRegisteredProduct(
+            id,
+            descricao,
+            quantidade_estoque,
+            valor,
+            categoria_id
+        );
 
         return res.status(200).json({ mensagem: "Produto atualizado com sucesso." });
+    } catch (error) {
+        return res.status(500).json({ mensagem: error.message });
+    }
+};
+
+const deleteProduct = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const productExist = await findProductById(id);
+
+        if (!productExist) {
+            return res.status(400).json({ mensagem: "O produto informado não existe." });
+        };
+
+        await deleteRegisterProduct(id);
+        return res.status(200).json({ mensagem: "Produto excluido com sucesso." });
     } catch (error) {
         return res.status(500).json({ mensagem: error.message });
     }
@@ -105,6 +130,7 @@ const detailProduct = async (req, res) => {
 module.exports = {
     registerProduct,
     editProduct,
+    deleteProduct,
     listProducts,
     detailProduct
-}
+};
