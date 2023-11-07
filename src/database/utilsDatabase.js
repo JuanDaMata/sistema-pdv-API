@@ -1,6 +1,6 @@
 const knex = require('../connections/knex');
 
-const listAll = async context => {
+const listAll = async (context) => {
     try {
         return await knex(context);
     } catch (error) {

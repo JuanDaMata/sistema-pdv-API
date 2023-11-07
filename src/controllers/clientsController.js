@@ -1,15 +1,13 @@
 const { findClientByCpf, registerNewClientDatabase } = require("../database/clientDatabase");
-const { findByIdWithContext, listAll, findByEmailWithContext } = require("../database/generic");
+const { findByIdWithContext, listAll, findByEmailWithContext } = require("../database/utilsDatabase");
 
 const clientRegister = async (req, res) => {
     const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
 
     try {
         const clientEmailAlreadyExists = await findByEmailWithContext('clientes', email);
-        // const emailAlreadyExists = await findByEmailWithContext('usuarios', email);
-        if (clientEmailAlreadyExists
-            // || emailAlreadyExists
-        ) {
+
+        if (clientEmailAlreadyExists) {
             return res.status(400).json({
                 mensagem: "O e-mail informado já está cadastrado."
             });

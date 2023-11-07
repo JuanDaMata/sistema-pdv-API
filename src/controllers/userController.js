@@ -4,7 +4,7 @@ const {
     editUserProfile,
     emailVerifyUpdate
 } = require('../database/userDatabase');
-const { findByIdWithContext, findByEmailWithContext } = require('../database/generic');
+const { findByIdWithContext, findByEmailWithContext } = require('../database/utilsDatabase');
 
 const userRegister = async (req, res) => {
     try {

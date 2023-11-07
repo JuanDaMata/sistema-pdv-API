@@ -21,16 +21,16 @@ const editRegisteredProduct = async (id, descricao, quantidade_estoque, valor, c
     }
 };
 
-const findAllProducts = async () => {
-    try {
+// const findAllProducts = async () => {
+//     try {
 
-        const products = await knex('produtos');
+//         const products = await knex('produtos');
 
-        return products;
-    } catch (error) {
-        return new Error("Erro de comunicação.");
-    }
-};
+//         return products;
+//     } catch (error) {
+//         return new Error("Erro de comunicação.");
+//     }
+// };
 
 const findProductsByCategoryId = async (categoria_id) => {
     try {
@@ -45,6 +45,6 @@ const findProductsByCategoryId = async (categoria_id) => {
 module.exports = {
     registerNewProductDatabase,
     editRegisteredProduct,
-    findAllProducts,
-    findProductsByCategoryId,
+    // findAllProducts,
+    findProductsByCategoryId
 }
