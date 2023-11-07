@@ -1,8 +1,8 @@
-const listCategories = require("../database/categoryDatabase");
+const { listAll } = require("../database/utilsDatabase");
 
 const listAllCategorys = async (req, res) => {
     try {
-        const categories = await listCategories();
+        const categories = await listAll('categorias');
         return res.status(200).json(categories);
     }
     catch (error) {

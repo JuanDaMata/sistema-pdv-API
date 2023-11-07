@@ -2,7 +2,6 @@ const { findByIdWithContext, listAll } = require("../database/utilsDatabase");
 const {
     registerNewProductDatabase,
     editRegisteredProduct,
-    // findAllProducts,
     findProductsByCategoryId
 } = require("../database/productDatabase");
 

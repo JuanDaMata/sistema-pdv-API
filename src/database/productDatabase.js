@@ -21,17 +21,6 @@ const editRegisteredProduct = async (id, descricao, quantidade_estoque, valor, c
     }
 };
 
-// const findAllProducts = async () => {
-//     try {
-
-//         const products = await knex('produtos');
-
-//         return products;
-//     } catch (error) {
-//         return new Error("Erro de comunicação.");
-//     }
-// };
-
 const findProductsByCategoryId = async (categoria_id) => {
     try {
         const products = await knex('produtos').where('categoria_id', categoria_id);
@@ -45,6 +34,5 @@ const findProductsByCategoryId = async (categoria_id) => {
 module.exports = {
     registerNewProductDatabase,
     editRegisteredProduct,
-    // findAllProducts,
     findProductsByCategoryId
 }
