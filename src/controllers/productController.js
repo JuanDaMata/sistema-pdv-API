@@ -1,6 +1,10 @@
 const { findByIdWithContext } = require("../database/generic");
-const { registerNewProductDatabase, editRegisteredProduct } = require("../database/productDatabase");
-
+const {
+    registerNewProductDatabase,
+    editRegisteredProduct,
+    findAllProducts,
+    findProductsByCategoryId
+} = require("../database/productDatabase");
 
 const registerProduct = async (req, res) => {
     const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
@@ -60,7 +64,47 @@ const editProduct = async (req, res) => {
     }
 };
 
+const listProducts = async (req, res) => {
+    const { categoria_id } = req.query;
+
+    try {
+
+        if (categoria_id) {
+            const filteredProducts = await findProductsByCategoryId(categoria_id);
+            return res.status(200).json(filteredProducts);
+        }
+
+        const products = await findAllProducts();
+
+        if (!products) {
+            return res.status(404).json({ message: "O produto informado não existe." });
+        }
+
+        return res.status(200).json(products);
+
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
+};
+
+const detailProduct = async (req, res) => {
+    try {
+        const productId = req.params;
+        const product = await findByIdWithContext('produtos', productId);
+
+        if (!product) {
+            return res.status(404).json({ message: "O produto informado não existe." });
+        }
+
+        return res.status(200).json(product);
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
+};
+
 module.exports = {
     registerProduct,
-    editProduct
+    editProduct,
+    listProducts,
+    detailProduct
 }
