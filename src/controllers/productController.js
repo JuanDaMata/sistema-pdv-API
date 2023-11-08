@@ -76,13 +76,13 @@ const listProducts = async (req, res) => {
         const products = await listAllWithContext('produtos');
 
         if (!products) {
-            return res.status(404).json({ message: "O produto informado não existe." });
+            return res.status(404).json({ mensagem: "O produto informado não existe." });
         }
 
         return res.status(200).json(products);
 
     } catch (error) {
-        return res.status(400).json(error.message);
+        return res.status(400).json({ mensagem: error.message });
     }
 };
 
@@ -92,12 +92,12 @@ const detailProduct = async (req, res) => {
         const product = await findByIdWithContext('produtos', productId);
 
         if (!product) {
-            return res.status(404).json({ message: "O produto informado não existe." });
+            return res.status(404).json({ mensagem: "O produto informado não existe." });
         }
 
         return res.status(200).json(product);
     } catch (error) {
-        return res.status(400).json(error.message);
+        return res.status(400).json({ mensagem: error.message });
     }
 };
 

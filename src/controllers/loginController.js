@@ -9,13 +9,13 @@ const login = async (req, res) => {
     const userFound = await findByEmailWithContext('usuarios', email);
 
     if (!userFound) {
-      return res.status(401).json("Usuário ou senha inválido");
+      return res.status(401).json({ mensagem: "Usuário ou senha inválido" });
     }
 
     const correctPassword = await bcrypt.compare(senha, userFound.senha);
 
     if (!correctPassword) {
-      return res.status(401).json("Usuário ou senha inválido");
+      return res.status(401).json({ mensagem: "Usuário ou senha inválido" });
     }
 
     const userTokenData = {

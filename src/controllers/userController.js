@@ -13,9 +13,7 @@ const userRegister = async (req, res) => {
         const user = await findByEmailWithContext('usuarios', email);
 
         if (user) {
-            return res.status(400).json({
-                mensagem: "O e-mail informado já existe.",
-            });
+            return res.status(400).json({ mensagem: "O e-mail informado já existe." });
         }
 
         const cryptographedPassword = await bcrypt.hash(senha, 10);
@@ -28,9 +26,7 @@ const userRegister = async (req, res) => {
 
         return res.status(201).json(registeredUser);
     } catch (error) {
-        return res.status(500).json({
-            message: error.message,
-        });
+        return res.status(500).json({ mensagem: error.message });
     }
 };
 
@@ -48,7 +44,7 @@ const detailProfile = async (req, res) => {
 
         return res.status(200).json(userDetail);
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ mensagem: error.message });
     }
 };
 
@@ -68,7 +64,7 @@ const editProfile = async (req, res) => {
         await editUserProfile(userLoged, nome, email, cryptographedPassword);
         return res.status(201).json({ mensagem: "Usuário atualizado com sucesso." })
     } catch (error) {
-        return res.status(500).json({ message: error.mensagem });
+        return res.status(500).json({ mensagem: error.mensagem });
     }
 };
 
