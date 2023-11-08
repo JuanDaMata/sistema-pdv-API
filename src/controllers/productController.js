@@ -117,7 +117,7 @@ const listProducts = async (req, res) => {
 
 const detailProduct = async (req, res) => {
     try {
-        const productId = req.params;
+        const productId = req.params.id;
         const product = await findByIdWithContext('produtos', productId);
 
         if (!product) {

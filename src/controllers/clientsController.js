@@ -83,6 +83,14 @@ const editClient = async (req, res) => {
             return res.status(400).json({ mensagem: "Cliente não encontrado" });
         }
 
+        const existCpf = await findClientByCpf(cpf);
+
+        const existEmail = await findByEmailWithContext("clientes", email);
+
+        if(existCpf || existEmail) {
+            return res.status(400).json({ mensagem: "Os dados informados já foram cadastrados." });
+        };
+
         const client = {
             nome,
             email,
@@ -101,7 +109,7 @@ const editClient = async (req, res) => {
             return res.status(400).json({ mensagem: "Erro ao atualizar o cliente" });
         }
 
-        return res.status(200).json("Cliente atualizado com sucesso");
+        return res.status(200).json({ mensagem: "Cliente atualizado com sucesso" });
     } catch (error) {
         return res.status(500).json({ mensagem: error.message });
     }
