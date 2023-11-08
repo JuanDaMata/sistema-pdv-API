@@ -1,4 +1,8 @@
-const { findClientByCpf, registerNewClientDatabase } = require("../database/clientDatabase");
+const {
+    findClientByCpf,
+    registerNewClientDatabase,
+    editClientWithContext
+} = require("../database/clientDatabase");
 const { findByIdWithContext, findByEmailWithContext, listAllWithContext } = require("../database/utilsDatabase");
 
 const clientRegister = async (req, res) => {
@@ -48,10 +52,13 @@ const detailClient = async (req, res) => {
 
     try {
         const client = await findByIdWithContext("clientes", clientId);
-        if (!client) return res.status(404).json({ mensagem: "Cliente não encontrado" });
+
+        if (!client) {
+            return res.status(404).json({ mensagem: "Cliente não encontrado" });
+        }
+
         return res.status(200).json(client);
-    }
-    catch (error) {
+    } catch (error) {
         return res.status(500).json({ mensagem: error.message });
     }
 };
@@ -65,8 +72,44 @@ const listAllClients = async (req, res) => {
     }
 };
 
+const editClient = async (req, res) => {
+    const { id } = req.params;
+    const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
+
+    try {
+        const clientExist = await findByIdWithContext("clientes", id);
+
+        if (!clientExist) {
+            return res.status(400).json({ mensagem: "Cliente não encontrado" });
+        }
+
+        const client = {
+            nome,
+            email,
+            cpf,
+            cep,
+            rua,
+            numero,
+            bairro,
+            cidade,
+            estado
+        };
+
+        const updatedClient = await editClientWithContext(id, client);
+
+        if (updatedClient > 0) {
+            return res.status(400).json({ mensagem: "Erro ao atualizar o cliente" });
+        }
+
+        return res.status(200).json("Cliente atualizado com sucesso");
+    } catch (error) {
+        return res.status(500).json({ mensagem: error.message });
+    }
+};
+
 module.exports = {
     clientRegister,
     detailClient,
-    listAllClients
+    listAllClients,
+    editClient
 };

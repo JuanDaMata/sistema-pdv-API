@@ -1,4 +1,4 @@
-const knex = require('../connections/knex');
+const knex = require("../connections/knex");
 
 const listAllWithContext = async (context) => {
     try {
@@ -12,8 +12,7 @@ const findByIdWithContext = async (context, id) => {
     try {
         const user = await knex(context).where({ id }).first();
         return user;
-    }
-    catch (error) {
+    } catch (error) {
         return new Error("Erro de comunicação.");
     }
 };
@@ -31,4 +30,4 @@ module.exports = {
     listAllWithContext,
     findByIdWithContext,
     findByEmailWithContext
-}
+};
