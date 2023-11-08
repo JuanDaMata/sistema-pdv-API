@@ -3,21 +3,15 @@ const {
     registerNewClientDatabase,
     editClientWithContext
 } = require("../database/clientDatabase");
-const {
-    findByIdWithContext,
-    listAll,
-    findByEmailWithContext
-} = require("../database/generic");
+const { findByIdWithContext, findByEmailWithContext, listAllWithContext } = require("../database/utilsDatabase");
 
 const clientRegister = async (req, res) => {
     const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
 
     try {
-        const clientEmailAlreadyExists = await findByEmailWithContext("clientes", email);
-        // const emailAlreadyExists = await findByEmailWithContext('usuarios', email);
-        if (clientEmailAlreadyExists
-            // || emailAlreadyExists
-        ) {
+        const clientEmailAlreadyExists = await findByEmailWithContext('clientes', email);
+
+        if (clientEmailAlreadyExists) {
             return res.status(400).json({
                 mensagem: "O e-mail informado já está cadastrado."
             });
@@ -53,13 +47,8 @@ const clientRegister = async (req, res) => {
 const detailClient = async (req, res) => {
     const clientId = req.params.id;
 
-    if (!clientId) {
-        return res.status(400).json({ msg: "O campo id é obrigatório" });
-    }
-
-    if (isNaN(clientId)) {
-        return res.status(400).json({ msg: "O campo id deve ser um número válido" });
-    }
+    if (!clientId) return res.status(400).json({ mensagem: "O campo id é obrigatório" });
+    if (isNaN(clientId)) return res.status(400).json({ mensagem: "O campo id deve ser um número válido" });
 
     try {
         const client = await findByIdWithContext("clientes", clientId);
@@ -76,8 +65,9 @@ const detailClient = async (req, res) => {
 
 const listAllClients = async (req, res) => {
     try {
-        return res.status(200).json(await listAll("clientes"));
-    } catch (error) {
+        return res.status(200).json(await listAllWithContext("clientes"));
+    }
+    catch (error) {
         return res.status(500).json({ mensagem: error.message });
     }
 };

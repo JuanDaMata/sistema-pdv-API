@@ -1,10 +1,8 @@
-const { findByIdWithContext } = require("../database/generic");
+const { findByIdWithContext, listAllWithContext } = require("../database/utilsDatabase");
 const {
     registerNewProductDatabase,
-    findProductById,
     editRegisteredProduct,
     deleteRegisterProduct,
-    findAllProducts,
     findProductsByCategoryId
 } = require("../database/productDatabase");
 
@@ -76,7 +74,7 @@ const deleteProduct = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const productExist = await findProductById(id);
+        const productExist = await findByIdWithContext("produtos", id);
 
         if (!productExist) {
             return res.status(400).json({ mensagem: "O produto informado não existe." });
@@ -96,19 +94,24 @@ const listProducts = async (req, res) => {
 
         if (categoria_id) {
             const filteredProducts = await findProductsByCategoryId(categoria_id);
-            return res.status(200).json(filteredProducts);
-        }
 
-        const products = await findAllProducts();
+            if (filteredProducts.length == 0) {
+                return res.status(200).json({ mensagem: "Não há produtos cadastrados na categoria informada." })
+            };
+
+            return res.status(200).json(filteredProducts);
+        };
+
+        const products = await listAllWithContext('produtos');
 
         if (!products) {
-            return res.status(404).json({ message: "O produto informado não existe." });
-        }
+            return res.status(404).json({ mensagem: "O produto informado não existe." });
+        };
 
         return res.status(200).json(products);
 
     } catch (error) {
-        return res.status(400).json(error.message);
+        return res.status(400).json({ mensagem: error.message });
     }
 };
 
@@ -118,12 +121,12 @@ const detailProduct = async (req, res) => {
         const product = await findByIdWithContext('produtos', productId);
 
         if (!product) {
-            return res.status(404).json({ message: "O produto informado não existe." });
+            return res.status(404).json({ mensagem: "O produto informado não existe." });
         }
 
         return res.status(200).json(product);
     } catch (error) {
-        return res.status(400).json(error.message);
+        return res.status(400).json({ mensagem: error.message });
     }
 };
 

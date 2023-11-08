@@ -1,6 +1,6 @@
 const knex = require("../connections/knex");
 
-const listAll = async (context) => {
+const listAllWithContext = async (context) => {
     try {
         return await knex(context);
     } catch (error) {
@@ -27,7 +27,7 @@ const findByEmailWithContext = async (context, email) => {
 };
 
 module.exports = {
-    listAll,
+    listAllWithContext,
     findByIdWithContext,
     findByEmailWithContext
 };

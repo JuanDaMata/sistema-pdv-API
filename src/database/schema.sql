@@ -24,13 +24,13 @@ CREATE TABLE clientes(
 	id SERIAL PRIMARY KEY,
   nome VARCHAR(255),
   email TEXT UNIQUE NOT NULL,
-  cpf TEXT UNIQUE NOT NULL,
-  cep VARCHAR(9),
+  cpf VARCHAR(11) UNIQUE NOT NULL,
+  cep VARCHAR(8),
   rua TEXT,
   numero VARCHAR(15),
   bairro TEXT,
   cidade TEXT,
-  estado TEXT
+  estado VARCHAR(2)
 );
 
 INSERT INTO categorias (descricao) VALUES ('Informática'), ('Celulares'), ('Beleza e Perfumaria'),
