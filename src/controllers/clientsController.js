@@ -1,5 +1,5 @@
 const { findClientByCpf, registerNewClientDatabase } = require("../database/clientDatabase");
-const { findByIdWithContext, listAll, findByEmailWithContext } = require("../database/utilsDatabase");
+const { findByIdWithContext, findByEmailWithContext, listAllWithContext } = require("../database/utilsDatabase");
 
 const clientRegister = async (req, res) => {
     const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
@@ -58,7 +58,7 @@ const detailClient = async (req, res) => {
 
 const listAllClients = async (req, res) => {
     try {
-        return res.status(200).json(await listAll("clientes"));
+        return res.status(200).json(await listAllWithContext("clientes"));
     }
     catch (error) {
         return res.status(500).json({ mensagem: error.message });

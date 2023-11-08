@@ -1,4 +1,4 @@
-const { findByIdWithContext, listAll } = require("../database/utilsDatabase");
+const { findByIdWithContext, listAllWithContext } = require("../database/utilsDatabase");
 const {
     registerNewProductDatabase,
     editRegisteredProduct,
@@ -73,7 +73,7 @@ const listProducts = async (req, res) => {
             return res.status(200).json(filteredProducts);
         }
 
-        const products = await listAll('produtos');
+        const products = await listAllWithContext('produtos');
 
         if (!products) {
             return res.status(404).json({ message: "O produto informado não existe." });

@@ -1,8 +1,8 @@
-const { listAll } = require("../database/utilsDatabase");
+const { listAllWithContext } = require("../database/utilsDatabase");
 
 const listAllCategorys = async (req, res) => {
     try {
-        const categories = await listAll('categorias');
+        const categories = await listAllWithContext('categorias');
         return res.status(200).json(categories);
     }
     catch (error) {
