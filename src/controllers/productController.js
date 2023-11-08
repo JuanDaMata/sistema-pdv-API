@@ -70,14 +70,19 @@ const listProducts = async (req, res) => {
 
         if (categoria_id) {
             const filteredProducts = await findProductsByCategoryId(categoria_id);
+
+            if (filteredProducts.length == 0) {
+                return res.status(200).json({ mensagem: "Não há produtos cadastrados na categoria informada." })
+            };
+
             return res.status(200).json(filteredProducts);
-        }
+        };
 
         const products = await listAllWithContext('produtos');
 
         if (!products) {
             return res.status(404).json({ mensagem: "O produto informado não existe." });
-        }
+        };
 
         return res.status(200).json(products);
 

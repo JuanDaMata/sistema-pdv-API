@@ -23,7 +23,7 @@ const editRegisteredProduct = async (id, descricao, quantidade_estoque, valor, c
 
 const findProductsByCategoryId = async (categoria_id) => {
     try {
-        const products = await knex('produtos').where('categoria_id', categoria_id);
+        const products = await knex('produtos').where({ categoria_id });
 
         return products;
     } catch (error) {

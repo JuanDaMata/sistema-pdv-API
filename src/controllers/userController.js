@@ -50,10 +50,10 @@ const detailProfile = async (req, res) => {
 
 const editProfile = async (req, res) => {
     const { nome, email, senha } = req.body;
-    const userLoged = req.user.id;
+    const userLogged = req.user.id;
 
     try {
-        const userEmail = await emailVerifyUpdate(email, userLoged);
+        const userEmail = await emailVerifyUpdate(email, userLogged);
 
         if (userEmail) {
             return res.status(400).json({ mensagem: "O e-mail informado já existe." });
@@ -61,7 +61,7 @@ const editProfile = async (req, res) => {
 
         const cryptographedPassword = await bcrypt.hash(senha, 10);
 
-        await editUserProfile(userLoged, nome, email, cryptographedPassword);
+        await editUserProfile(userLogged, nome, email, cryptographedPassword);
         return res.status(201).json({ mensagem: "Usuário atualizado com sucesso." })
     } catch (error) {
         return res.status(500).json({ mensagem: error.mensagem });
