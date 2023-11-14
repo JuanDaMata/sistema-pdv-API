@@ -38,7 +38,6 @@ INSERT INTO categorias (descricao) VALUES ('Informática'), ('Celulares'), ('Bel
 
 ALTER TABLE produtos ADD COLUMN produto_imagem TEXT;
 
--- Criando a tabela pedidos
 CREATE TABLE pedidos (
   id SERIAL PRIMARY KEY,
   cliente_id INTEGER REFERENCES clientes(id),
@@ -46,7 +45,6 @@ CREATE TABLE pedidos (
   valor_total INTEGER
 );
 
--- Criando a tabela pedido_produtos
 CREATE TABLE pedido_produtos (
   id SERIAL PRIMARY KEY,
   pedido_id INTEGER REFERENCES pedidos(id),
