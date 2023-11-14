@@ -76,9 +76,18 @@ const deleteProduct = async (req, res) => {
     try {
         const productExist = await findByIdWithContext("produtos", id);
 
+        const product_orders = await listAllWithContext("pedido_produtos");
+        console.log(product_orders);
+        // product2 = product_orders.filter(product => product.produto_id === id);
+        // console.log(product2);
+
         if (!productExist) {
             return res.status(400).json({ mensagem: "O produto informado não existe." });
         };
+
+        // const product_orders = listAllWithContext("pedido_produtos");
+
+        // await deleteRegisterProduct(id);
 
         await deleteRegisterProduct(id);
         return res.status(200).json({ mensagem: "Produto excluido com sucesso." });
