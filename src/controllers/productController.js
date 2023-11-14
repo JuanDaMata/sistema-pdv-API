@@ -5,6 +5,7 @@ const {
     deleteRegisterProduct,
     findProductsByCategoryId
 } = require("../database/productDatabase");
+const validatesWhetherTheProductBelongsToAnOrder = require("../services/deleteProductValidation");
 
 const registerProduct = async (req, res) => {
     const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
@@ -76,22 +77,18 @@ const deleteProduct = async (req, res) => {
     try {
         const productExist = await findByIdWithContext("produtos", id);
 
-        const product_orders = await listAllWithContext("pedido_produtos");
-        console.log(product_orders);
-        // product2 = product_orders.filter(product => product.produto_id === id);
-        // console.log(product2);
-
         if (!productExist) {
             return res.status(400).json({ mensagem: "O produto informado não existe." });
         };
 
-        // const product_orders = listAllWithContext("pedido_produtos");
-
-        // await deleteRegisterProduct(id);
+        const hasOrders = await validatesWhetherTheProductBelongsToAnOrder(productExist);
+        if (hasOrders) return res.status(403).json({ mensagem: "O produto informado está presente em um pedido e não pode ser excluído." });
 
         await deleteRegisterProduct(id);
         return res.status(200).json({ mensagem: "Produto excluido com sucesso." });
-    } catch (error) {
+    }
+
+    catch (error) {
         return res.status(500).json({ mensagem: error.message });
     }
 };
