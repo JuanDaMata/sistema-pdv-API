@@ -15,8 +15,8 @@ const productRouter = Router();
 
 productRouter.post("/produto",
     verifyLoggedUser,
-    validationBodyMiddleware(productSchema),
     multer.single('file'),
+    validationBodyMiddleware(productSchema),
     registerProduct
 );
 
@@ -33,9 +33,9 @@ productRouter.get("/produto/:id",
 
 productRouter.put("/produto/:id",
     verifyLoggedUser,
+    multer.single('file'),
     validationBodyMiddleware(productSchema),
     validationParamsMiddleware(productParamsIdSchema),
-    multer.single('file'),
     editProduct
 );
 
