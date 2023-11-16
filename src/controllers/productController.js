@@ -65,6 +65,7 @@ const registerProduct = async (req, res) => {
 const editProduct = async (req, res) => {
     const { id } = req.params;
     const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
+    const { file } = req;
 
     if (quantidade_estoque < 0) {
         return res.status(400).json({ mensagem: "Quantidade de estoque inválida" });
@@ -82,6 +83,28 @@ const editProduct = async (req, res) => {
         if (!productExist) {
             return res.status(400).json({ mensagem: "O produto informado não existe." });
         }
+
+        if (file) {
+            const fileName = file.originalname.trim().split(' ').join('');
+
+            const { url } = await uploadFiles(
+                `produtos/${id}/${fileName}`,
+                file.buffer,
+                file.mimetype
+            );
+
+            const productUpdated = {
+                descricao,
+                quantidade_estoque,
+                valor,
+                categoria_id,
+                produto_imagem: url
+            };
+
+            await editRegisteredProduct(id, productUpdated);
+
+            return res.status(201).json({ mensagem: "Produto atualizado com sucesso." });
+        };
 
         const editedProduct = {
             id,
