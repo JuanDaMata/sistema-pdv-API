@@ -35,8 +35,10 @@ const registerProduct = async (req, res) => {
         if (file) {
             const { id } = newProduct;
 
+            const fileName = file.originalname.trim().split(' ').join('');
+
             const { url } = await uploadFiles(
-                `produtos/${id}/${file.originalname}`,
+                `produtos/${id}/${fileName}`,
                 file.buffer,
                 file.mimetype
             );
