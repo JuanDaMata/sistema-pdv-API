@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const multer = require('../services/multer');
 const verifyLoggedUser = require("../middlewares/loginMiddleware");
 const { validationBodyMiddleware, validationParamsMiddleware } = require("../middlewares/validation");
 const { productSchema, productParamsIdSchema } = require("../validations/productSchema");
@@ -15,6 +16,7 @@ const productRouter = Router();
 productRouter.post("/produto",
     verifyLoggedUser,
     validationBodyMiddleware(productSchema),
+    multer.single('file'),
     registerProduct
 );
 
@@ -33,6 +35,7 @@ productRouter.put("/produto/:id",
     verifyLoggedUser,
     validationBodyMiddleware(productSchema),
     validationParamsMiddleware(productParamsIdSchema),
+    multer.single('file'),
     editProduct
 );
 
