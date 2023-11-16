@@ -1,10 +1,10 @@
-const {listOrders} = require('../database/ordersDatabase')
+const {listingOrders} = require('../database/ordersDatabase')
 
 const listOrders = async (req,res) => {
     try {
         const clinte_id = req.query.cliente_id;
 
-        const orders = await listOrders(clinte_id);
+        const orders = await listingOrders(clinte_id);
 
         res.status(200).json(orders)
     } catch (error) {
