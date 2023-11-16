@@ -1,21 +1,21 @@
-const knex = require('../connections/knex');
+const knex = require("../connections/knex");
 
 const listingOrders = async (cliente_id) => {
-    try {
-        let query = knex('pedidos')
-        .select(
-            'pedidos.id',
-            'pedidos.valor_total',
-            'pedidos.observacao',
-            'pedidos.cliente_id',
-            'pedido_produtos.id as pedidoProduto_id',
-            'pedido_produtos.quantidade_produto',
-            'pedido_produtos.valor_produto',
-            'pedido_produtos.pedido_id',
-            'pedido_produtos.produto_id'
-            )
-        .leftJoin('pedido_produtos', 'pedidos.id', 'pedido_produtos.pedido_id')
-        .leftJoin('produtos', 'pedido_produtos.produto_id', 'produtos.id');
+  try {
+    let query = knex("pedidos")
+      .select(
+        "pedidos.id",
+        "pedidos.valor_total",
+        "pedidos.observacao",
+        "pedidos.cliente_id",
+        "pedido_produtos.id as pedidoProduto_id",
+        "pedido_produtos.quantidade_produto",
+        "pedido_produtos.valor_produto",
+        "pedido_produtos.pedido_id",
+        "pedido_produtos.produto_id"
+      )
+      .leftJoin("pedido_produtos", "pedidos.id", "pedido_produtos.pedido_id")
+      .leftJoin("produtos", "pedido_produtos.produto_id", "produtos.id");
 
         if (cliente_id) {
             query = query.where('pedidos.cliente_id', cliente_id)
@@ -97,4 +97,3 @@ module.exports = {
     findProductForEachProductId,
     registeringOrder
 }
-
