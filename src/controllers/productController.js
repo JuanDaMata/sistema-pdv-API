@@ -6,7 +6,7 @@ const {
     findProductsByCategoryId
 } = require("../database/productDatabase");
 const validatesWhetherTheProductBelongsToAnOrder = require("../services/deleteProductValidation");
-const { uploadFiles } = require("../services/upload");
+const { uploadFiles, deleteFiles } = require("../services/upload");
 
 const registerProduct = async (req, res) => {
     const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
@@ -102,6 +102,11 @@ const editProduct = async (req, res) => {
             };
 
             await editRegisteredProduct(id, productUpdated);
+
+            const deleteFileName = productExist.produto_imagem.split('/')[5];
+            const path = `produtos/${id}/${deleteFileName}`;
+
+            await deleteFiles(path);
 
             return res.status(201).json({ mensagem: "Produto atualizado com sucesso." });
         };
