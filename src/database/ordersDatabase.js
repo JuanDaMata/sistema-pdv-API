@@ -60,11 +60,41 @@ const listingOrders = async (cliente_id) => {
 
         return orders;
     } catch (error) {
-        return res.status(500).json({ mensagem: error.message });
+        return new Error("Erro ao listar pedidos");
     }
-}
+};
+
+const findProductForEachProductId = async (req, res, next) => {
+    try {
+        const productsNotFound = [];
+
+        for (const produto of pedido_produto) {
+            let produtoAtual = await knex('produtos').where('id', produto.produto_id).first()
+
+            if (!produtoAtual) {
+                productsNotFound.push(produtoAtual)
+            }
+        }
+
+        if (productsNotFound.length > 0) {
+
+        }
+    } catch (error) {
+        return new Error("Erro de comunicação.");
+    }
+};
+
+const registeringOrder = async () => {
+    try {
+        
+    } catch (error) {
+        return new Error("Erro no cadastro do pedido");
+    }
+};
 
 module.exports = {
-    listingOrders
+    listingOrders,
+    findProductForEachProductId,
+    registeringOrder
 }
 
