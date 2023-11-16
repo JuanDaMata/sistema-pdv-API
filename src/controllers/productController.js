@@ -6,9 +6,11 @@ const {
     findProductsByCategoryId
 } = require("../database/productDatabase");
 const validatesWhetherTheProductBelongsToAnOrder = require("../services/deleteProductValidation");
+const { uploadFiles } = require("../services/upload");
 
 const registerProduct = async (req, res) => {
     const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
+    const { file } = req;
 
     if (quantidade_estoque < 0) {
         return res.status(400).json({ mensagem: "Quantidade de estoque inválida" });
@@ -29,6 +31,28 @@ const registerProduct = async (req, res) => {
         };
 
         const newProduct = await registerNewProductDatabase(product);
+
+        if (file) {
+            const { id } = newProduct;
+
+            const { url } = await uploadFiles(
+                `produtos/${id}/${file.originalname}`,
+                file.buffer,
+                file.mimetype
+            );
+
+            const productUpdated = {
+                descricao,
+                quantidade_estoque,
+                valor,
+                categoria_id,
+                produto_imagem: url
+            };
+
+            const newProductUpdated = await editRegisteredProduct(id, productUpdated);
+
+            return res.status(201).json(newProductUpdated);
+        };
 
         return res.status(201).json(newProduct);
     } catch (error) {
@@ -57,13 +81,15 @@ const editProduct = async (req, res) => {
             return res.status(400).json({ mensagem: "O produto informado não existe." });
         }
 
-        await editRegisteredProduct(
+        const editedProduct = {
             id,
             descricao,
             quantidade_estoque,
             valor,
             categoria_id
-        );
+        };
+
+        await editRegisteredProduct(id, editedProduct);
 
         return res.status(200).json({ mensagem: "Produto atualizado com sucesso." });
     } catch (error) {
