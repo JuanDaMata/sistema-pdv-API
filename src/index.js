@@ -7,7 +7,7 @@ const categoryRouter = require('./routes/categoryRouter');
 const userRouter = require('./routes/userRouter');
 const clientRouter = require('./routes/clientRouter');
 const productRouter = require('./routes/productRouter');
-const ordersRouter = require('./routes/ordersRouter');
+const orderRouter = require('./routes/orderRouter');
 
 const app = express();
 
@@ -19,7 +19,7 @@ app.use(categoryRouter);
 app.use(userRouter);
 app.use(clientRouter);
 app.use(productRouter);
-app.use(ordersRouter);
+app.use(orderRouter);
 
 const port = process.env.PORT || 3000;
 

@@ -26,7 +26,7 @@ const deleteRegisterProduct = async (id) => {
     try {
         const deleteProduct = await knex("produtos").where({ id }).del();
     } catch (error) {
-        return new Error("Erro ao atualizar produto.");
+        return new Error("Erro ao excluir produto.");
     }
 };
 
