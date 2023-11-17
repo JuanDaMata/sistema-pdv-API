@@ -101,14 +101,14 @@ const totalValue = async (pedido_produto) => {
 
 const registeringOrder = async (body) => {
     try {
-        for (const produto of body.pedido_produtos) {
-            const order = await knex('pedidos')
-                .insert({
-                    cliente_id: body.cliente_id,
-                    observacao: body.observacao,
-                    valor_total: await totalValue(body.pedido_produtos)
-                }).returning('*');
+        const order = await knex('pedidos')
+            .insert({
+                cliente_id: body.cliente_id,
+                observacao: body.observacao,
+                valor_total: await totalValue(body.pedido_produtos)
+            }).returning('*');
 
+        for (const produto of body.pedido_produtos) {
             const currentProduct = await knex('produtos').where('id', produto.produto_id).first();
 
             await knex('pedido_produtos')
