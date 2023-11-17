@@ -143,12 +143,14 @@ const deleteProduct = async (req, res) => {
             return res.status(403).json({ mensagem: "O produto informado está presente em um pedido e não pode ser excluído." });
         };
 
-        const deleteFileName = productExist.produto_imagem.split('/')[5];
-        const path = `produtos/${id}/${deleteFileName}`;
+        if (productExist.produto_imagem != null) {
+            const deleteFileName = productExist.produto_imagem.split('/')[5];
+            const path = `produtos/${id}/${deleteFileName}`;
 
-        await deleteFiles(path);
+            await deleteFiles(path);
+        };
+
         await deleteRegisterProduct(id);
-
         return res.status(200).json({ mensagem: "Produto excluido com sucesso." });
     }
 
