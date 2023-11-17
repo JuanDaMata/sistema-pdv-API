@@ -1,7 +1,19 @@
-const { findProductForEachProductId, registeringOrder } = require('../database/ordersDatabase');
+const { findProductForEachProductId, registeringOrder, listingOrders } = require('../database/ordersDatabase');
 const { findByIdWithContext } = require('../database/utilsDatabase');
 const htmlCompiler = require('../services/htmlCompiler');
 const transporter = require('../connections/sendEmail');
+
+const listOrders = async (req, res) => {
+    try {
+        const clinte_id = req.query.cliente_id;
+
+        const orders = await listingOrders(clinte_id);
+
+        return res.status(200).json(orders)
+    } catch (error) {
+        return res.status(500).json({ mensagem: error.message });
+    }
+};
 
 const registerOrder = async (req, res) => {
     const { cliente_id, pedido_produtos } = req.body
@@ -44,5 +56,6 @@ const registerOrder = async (req, res) => {
 };
 
 module.exports = {
+    listOrders,
     registerOrder
 };
