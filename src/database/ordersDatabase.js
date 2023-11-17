@@ -90,7 +90,7 @@ const totalValue = async (pedido_produto) => {
         for (const produto of pedido_produto) {
             let currentProduct = await knex('produtos').where('id', produto.produto_id).first()
 
-             totalValueOrder += produtoCorrente.valor * item.quantidade_produto
+             totalValueOrder += currentProduct.valor * produto.quantidade_produto
         };
 
         return totalValueOrder;
@@ -106,7 +106,7 @@ const registeringOrder = async (body) => {
                 .insert({
                     cliente_id: body.cliente_id,
                     observacao: body.observacao,
-                    valor_total: totalValue()  
+                    valor_total: totalValue(body.pedido_produtos)  
                 });
 
             let reducedQuantity = produto.quantidade_estoque - produto.quantidade_produto
@@ -117,7 +117,7 @@ const registeringOrder = async (body) => {
                     quantidade_estoque: reducedQuantity
                 })
         }
-        
+
         return
     } catch (error) {
         return new Error("Erro no cadastro do pedido");
