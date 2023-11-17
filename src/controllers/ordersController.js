@@ -3,7 +3,7 @@ const { findByIdWithContext } = require('../database/utilsDatabase');
 
 const listOrders = async (req, res) => {
     try {
-        const cliente_id = req.query.cliente_id;
+        const { cliente_id } = req.query;
 
         const orders = await listingOrders(cliente_id);
 
