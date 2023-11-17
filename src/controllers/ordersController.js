@@ -1,19 +1,7 @@
-const { listingOrders, findProductForEachProductId, registeringOrder } = require('../database/ordersDatabase');
+const { findProductForEachProductId, registeringOrder } = require('../database/ordersDatabase');
 const { findByIdWithContext } = require('../database/utilsDatabase');
 const htmlCompiler = require('../services/htmlCompiler');
 const transporter = require('../connections/sendEmail');
-
-const listOrders = async (req, res) => {
-    try {
-        const { cliente_id } = req.query;
-
-        const orders = await listingOrders(cliente_id);
-
-        return res.status(200).json(orders)
-    } catch (error) {
-        return res.status(500).json({ mensagem: error.message });
-    }
-};
 
 const registerOrder = async (req, res) => {
     const { cliente_id, pedido_produtos } = req.body
@@ -31,12 +19,7 @@ const registerOrder = async (req, res) => {
             return res.status(400).json({ mensagem: "Não foi possível efetuar o pedido." });
         };
 
-        const register = await registeringOrder(req.body);
-        console.log(register)
-
-        if (!register) {
-            return res.status(400).json({ mensagem: "Não foi possível cadastrar o pedido." });
-        }
+        await registeringOrder(req.body);
 
         const cliente = {
             nome: customerExists.nome,
@@ -61,6 +44,5 @@ const registerOrder = async (req, res) => {
 };
 
 module.exports = {
-    listOrders,
     registerOrder
-}
+};
