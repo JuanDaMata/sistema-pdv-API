@@ -9,13 +9,14 @@ const registerNewProductDatabase = async (product) => {
     }
 };
 
-const editRegisteredProduct = async (id, descricao, quantidade_estoque, valor, categoria_id) => {
+const editRegisteredProduct = async (id, product) => {
     try {
         const editedProduct = await knex("produtos")
             .where("id", id)
-            .update({ descricao, quantidade_estoque, valor, categoria_id });
+            .update(product)
+            .returning('*');
 
-        return editedProduct;
+        return editedProduct[0];
     } catch (error) {
         return new Error("Erro ao atualizar produto.");
     }
@@ -25,7 +26,7 @@ const deleteRegisterProduct = async (id) => {
     try {
         const deleteProduct = await knex("produtos").where({ id }).del();
     } catch (error) {
-        return new Error("Erro ao atualizar produto.");
+        return new Error("Erro ao excluir produto.");
     }
 };
 
