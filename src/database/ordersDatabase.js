@@ -1,21 +1,21 @@
 const knex = require("../connections/knex");
 
 const listingOrders = async (cliente_id) => {
-  try {
-    let query = knex("pedidos")
-      .select(
-        "pedidos.id",
-        "pedidos.valor_total",
-        "pedidos.observacao",
-        "pedidos.cliente_id",
-        "pedido_produtos.id as pedidoProduto_id",
-        "pedido_produtos.quantidade_produto",
-        "pedido_produtos.valor_produto",
-        "pedido_produtos.pedido_id",
-        "pedido_produtos.produto_id"
-      )
-      .leftJoin("pedido_produtos", "pedidos.id", "pedido_produtos.pedido_id")
-      .leftJoin("produtos", "pedido_produtos.produto_id", "produtos.id");
+    try {
+        let query = knex("pedidos")
+            .select(
+                "pedidos.id",
+                "pedidos.valor_total",
+                "pedidos.observacao",
+                "pedidos.cliente_id",
+                "pedido_produtos.id as pedidoProduto_id",
+                "pedido_produtos.quantidade_produto",
+                "pedido_produtos.valor_produto",
+                "pedido_produtos.pedido_id",
+                "pedido_produtos.produto_id"
+            )
+            .leftJoin("pedido_produtos", "pedidos.id", "pedido_produtos.pedido_id")
+            .leftJoin("produtos", "pedido_produtos.produto_id", "produtos.id");
 
         if (cliente_id) {
             query = query.where('pedidos.cliente_id', cliente_id)
@@ -25,8 +25,8 @@ const listingOrders = async (cliente_id) => {
 
         const orders = [];
 
-        result.forEach(row => {
-            const orderIndex = orders.findIndex(o => o.pedido.id === row.id);
+        result.forEach((row) => {
+            const orderIndex = orders.findIndex((o) => o.pedido.id === row.id);
 
             if (orderIndex === -1) {
                 const order = {
@@ -64,29 +64,61 @@ const listingOrders = async (cliente_id) => {
     }
 };
 
-const findProductForEachProductId = async (req, res, next) => {
+const findProductForEachProductId = async (pedido_produto) => {
     try {
-        const productsNotFound = [];
+        const invalidProducts = [];
 
         for (const produto of pedido_produto) {
-            let produtoAtual = await knex('produtos').where('id', produto.produto_id).first()
+            let currentProduct = await knex('produtos').where('id', produto.produto_id).first()
 
-            if (!produtoAtual) {
-                productsNotFound.push(produtoAtual)
+            if (!currentProduct || currentProduct.quantidade_estoque < produto.quantidade_produto) {
+                invalidProducts.push(currentProduct);
             }
-        }
 
-        if (productsNotFound.length > 0) {
+        };
 
-        }
+        return invalidProducts;
     } catch (error) {
         return new Error("Erro de comunicação.");
     }
 };
 
-const registeringOrder = async () => {
+const totalValue = async (pedido_produto) => {
     try {
+        const totalValueOrder = 0;
+
+        for (const produto of pedido_produto) {
+            let currentProduct = await knex('produtos').where('id', produto.produto_id).first()
+
+             totalValueOrder += produtoCorrente.valor * item.quantidade_produto
+        };
+
+        return totalValueOrder;
+    } catch (error) {
+        return new Error("Erro de comunicação.");
+    }
+}
+
+const registeringOrder = async (body) => {
+    try {
+        for (const produto of body.pedido_produtos) {
+            await knex('pedidos')
+                .insert({
+                    cliente_id: body.cliente_id,
+                    observacao: body.observacao,
+                    valor_total: totalValue()  
+                });
+
+            let reducedQuantity = produto.quantidade_estoque - produto.quantidade_produto
+
+            await knex('produtos')
+                .where('id', '=', produto.produto_id)
+                .update({
+                    quantidade_estoque: reducedQuantity
+                })
+        }
         
+        return
     } catch (error) {
         return new Error("Erro no cadastro do pedido");
     }
